@@ -9,12 +9,18 @@ Neste trabalho você irá implementar uma rede neuronal com três camadas:
 Você irá utilizar a função Sigmóide para obter não-linearidade. Além disso, a função de perda a ser minimizada é a seguinte:
 
 $$
-
+J(\theta) =
+\frac{1}{m}
+\sum^m_{i=1} \sum^K_{k=1}
+\Big[
+-y_k^{(i)} log((h_{\theta}(x^{(i)}))_k)
+- (1 - y^{(i)}_k) log(1 - (h_\theta(x^{(i)}))_k)
+\Big]
 $$
 
-onde m é a quantidade de entradas no treino, K é o número de saídas possíveis,  representa a saída correta de cada classe k em cada entrada (i), e similarmente representa a saída dada pela rede neuronal.
+onde $m$ é a quantidade de entradas no treino, $K$ é o número de saídas possíveis,  representa a saída correta de cada classe $k$ em cada entrada $(i)$, e similarmente representa a saída dada pela rede neuronal.
 
-O dado a ser utilizado está anexado. Trata-se de 5000 entradas, onde cada entrada refere-se a um dígito escrito manualmente (i.e., MNIST dataset). Dessa forma, m=5000 e K=10. Cada entrada é dada por uma matriz de dimensões 28 por 28, ou seja, um vetor de 784 dimensões. A primeira coluna do arquivo sempre é o rótulo do dígito correto.
+O dado a ser utilizado está anexado. Trata-se de 5000 entradas, onde cada entrada refere-se a um dígito escrito manualmente (i.e., MNIST dataset). Dessa forma, $m=5000$ e $K=10$. Cada entrada é dada por uma matriz de dimensões 28 por 28, ou seja, um vetor de 784 dimensões. A primeira coluna do arquivo sempre é o rótulo do dígito correto.
 
 A rede neuronal a ser implementada deverá ter 784 unidades de entrada e 10 unidades de saída. Em seus experimentos, você deverá variar o número de unidades na camada oculta (25, 50, 100).
 
