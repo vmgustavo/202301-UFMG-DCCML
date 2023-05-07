@@ -8,8 +8,7 @@ Neste trabalho você irá implementar uma rede neuronal com três camadas:
 
 Você irá utilizar a função Sigmóide para obter não-linearidade. Além disso, a função de perda a ser minimizada é a seguinte:
 
-$$
-J(\theta) = \frac{1}{m} \sum^m_{i=1} \sum^K_{k=1} \Big[ -y_k^{(i)} log((h_{\theta}(x^{(i)}))_k) - (1 - y^{(i)}_k) log(1 - (h_\theta(x^{(i)}))_k) \Big] $$
+$$J(\theta) = \frac{1}{m} \sum^m_{i=1} \sum^K_{k=1} \Big[ -y_k^{(i)} log((h_{\theta}(x^{(i)}))_k) - (1 - y^{(i)}_k) log(1 - (h_\theta(x^{(i)}))_k) \Big]$$
 
 onde $m$ é a quantidade de entradas no treino, $K$ é o número de saídas possíveis,  representa a saída correta de cada classe $k$ em cada entrada $(i)$, e similarmente representa a saída dada pela rede neuronal.
 
