@@ -10,6 +10,7 @@ python = "~3.10"
 pandas = "^2.0.1"
 scikit-learn = "^1.2.2"
 matplotlib = "^3.7.1"
+tqdm = "^4.65.0"
 
 
 [tool.poetry.group.dev.dependencies]
