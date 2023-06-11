@@ -38,4 +38,4 @@ def download_data():
         .dropna()
     )
 
-    return data
+    return data.iloc[:, -1], data.iloc[:, :-1]
