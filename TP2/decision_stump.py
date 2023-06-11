@@ -36,7 +36,7 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
         ]
 
         decisions = list()
-        decision = namedtuple('decision', ['attr', 'test', 'gain'])
+        decision = namedtuple('decision', ['attr', 'test', 'gain', 'output'])
         for attr in range(self.X_.shape[1]):
             for test in tests:
                 tested = test(self.X_[:, attr])
@@ -49,7 +49,9 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
 
                 info_gain = entropy_init - entropy_new
 
-                decisions.append(decision(attr, test, info_gain))
+                _, counts = np.unique(group0, return_counts=True)
+
+                decisions.append(decision(attr, test, info_gain, np.argmax(counts)))
 
         self.best_attr_test_ = sorted(decisions, key=lambda x: x.gain, reverse=True)[0]
 
@@ -73,8 +75,12 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
 
         # Input validation
         X = check_array(X, dtype=None)
-        attr, test, _ = self.best_attr_test_
-        return test(X[:, attr]).astype('int')
+        attr, test, _, output = self.best_attr_test_
+
+        if bool(output):
+            return test(X[:, attr]).astype('int')
+        else:
+            return (~test(X[:, attr])).astype('int')
 
 
 if __name__ == '__main__':
