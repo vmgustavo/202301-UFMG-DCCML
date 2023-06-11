@@ -30,7 +30,7 @@ def download_data():
         'Class',
     ]
 
-    data = (
+    df = (
         pd.DataFrame(
             [row.split(',') for row in extracted['tic-tac-toe.data'].decode('utf8').split('\n')],
             columns=columns
@@ -38,4 +38,10 @@ def download_data():
         .dropna()
     )
 
-    return data.iloc[:, -1], data.iloc[:, :-1]
+    df['Class'] = df['Class'].apply(lambda x: {'positive': 1, 'negative': 0}[x])
+
+    return df.iloc[:, -1], df.iloc[:, :-1]
+
+
+if __name__ == '__main__':
+    data, target = download_data()
