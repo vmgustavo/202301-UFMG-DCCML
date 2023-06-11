@@ -72,9 +72,9 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
         check_is_fitted(self, ['X_', 'y_'])
 
         # Input validation
-        X = check_array(X)
-
-        return
+        X = check_array(X, dtype=None)
+        attr, test, _ = self.best_attr_test_
+        return test(X[:, attr]).astype('int')
 
 
 if __name__ == '__main__':
