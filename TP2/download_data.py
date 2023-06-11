@@ -40,7 +40,7 @@ def download_data():
 
     df['Class'] = df['Class'].apply(lambda x: {'positive': 1, 'negative': 0}[x])
 
-    return df.iloc[:, -1], df.iloc[:, :-1]
+    return df.iloc[:, :-1], df.iloc[:, -1]
 
 
 if __name__ == '__main__':
