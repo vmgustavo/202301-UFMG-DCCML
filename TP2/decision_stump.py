@@ -15,8 +15,8 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
     classes_: Any
     best_attr_test_: Any
 
-    def __init__(self, demo_param='demo'):
-        self.demo_param = demo_param
+    def __init__(self):
+        pass
 
     def fit(self, X, y):
         # Check that X and y have correct shape
