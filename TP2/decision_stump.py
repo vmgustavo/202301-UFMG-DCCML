@@ -18,16 +18,14 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
     def __init__(self):
         pass
 
-    def fit(self, X, y):
-        # Check that X and y have correct shape
-        X, y = check_X_y(X, y, dtype=None, y_numeric=True)
-        # Store the classes seen during fit
+    def fit(self, X, y, weights):
+        X, y = check_X_y(X, y, weights, dtype=None, y_numeric=True)
         self.classes_ = unique_labels(y)
 
         self.X_ = X
         self.y_ = y
 
-        entropy_init = self._entropy_step(self.y_)
+        entropy_init = self._entropy_step(self.y_, weights)
 
         tests = [
             lambda x: eq(x, 'x'),
@@ -41,10 +39,13 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
             for test in tests:
                 tested = test(self.X_[:, attr])
                 group0 = self.y_[np.where(tested)]
+                group0_weights = weights[np.where(tested)]
                 group1 = self.y_[np.where(~tested)]
+                group1_weights = weights[np.where(~tested)]
+
                 entropy_new = (
-                    group0.shape[0] / self.y_.shape[0] * self._entropy_step(group0)
-                    + group1.shape[0] / self.y_.shape[0] * self._entropy_step(group1)
+                    group0.shape[0] / self.y_.shape[0] * self._entropy_step(group0, group0_weights)
+                    + group1.shape[0] / self.y_.shape[0] * self._entropy_step(group1, group1_weights)
                 )
 
                 info_gain = entropy_init - entropy_new
@@ -62,11 +63,13 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
         freq = a / (a + b)
         return -1 * freq * np.log(freq)
 
-    def _entropy_step(self, arr: np.ndarray):
-        unique, counts = np.unique(arr, return_counts=True)
+    def _entropy_step(self, arr: np.ndarray, weights):
+        total_0 = int(np.sum(weights[np.where(arr == 0)]))
+        total_1 = int(np.sum(weights[np.where(arr == 1)]))
+
         return (
-            self._entropy(counts[0], counts[1])
-            + self._entropy(counts[1], counts[0])
+            self._entropy(total_0, total_1)
+            + self._entropy(total_1, total_0)
         )
 
     def predict(self, X):
@@ -89,7 +92,7 @@ if __name__ == '__main__':
     data, target = download_data()
 
     model = DecisionStump()
-    model.fit(data, target)
+    model.fit(data, target, np.ones(target.shape[0]))
     print(accuracy_score(
         y_pred=model.predict(data),
         y_true=target,
