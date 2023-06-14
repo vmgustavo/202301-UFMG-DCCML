@@ -1,4 +1,3 @@
-from typing import Any
 from operator import eq
 from collections import namedtuple
 
@@ -10,10 +9,11 @@ from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
 
 class DecisionStump(ClassifierMixin, BaseEstimator):
-    X_: Any
-    y_: Any
-    classes_: Any
-    best_attr_test_: Any
+    X_: np.ndarray
+    y_: np.ndarray
+    classes_: np.ndarray
+
+    best_attr_test_: namedtuple
 
     def __init__(self):
         pass
