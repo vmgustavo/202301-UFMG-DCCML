@@ -17,11 +17,11 @@ class AdaBoost(ClassifierMixin, BaseEstimator):
     classifiers_: list
     errors_: list
 
-    iter_error_: list
+    iter_acc_: list
 
     def __init__(self, iterations: int = 100):
         self.iterations = iterations
-        self.iter_error_ = list()
+        self.iter_acc_ = list()
 
     def fit(self, X, y):
         # Check that X and y have correct shape
@@ -52,7 +52,7 @@ class AdaBoost(ClassifierMixin, BaseEstimator):
         return self
 
     def _iter_error(self, X, y):
-        self.iter_error_.append(accuracy_score(y_true=y, y_pred=self.predict(X)))
+        self.iter_acc_.append(accuracy_score(y_true=y, y_pred=self.predict(X)))
 
     def predict(self, X):
         # Check is fit had been called
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     model = AdaBoost(iterations=100)
     model.fit(data, target)
 
-    print(model.iter_error_)
+    print(model.iter_acc_)
     print(accuracy_score(
         y_pred=model.predict(data),
         y_true=target,
