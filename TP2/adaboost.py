@@ -16,10 +16,12 @@ class AdaBoost(ClassifierMixin, BaseEstimator):
     alphas_: list
     classifiers_: list
     errors_: list
-    accuracies_: list
+
+    iter_error_: list
 
     def __init__(self, iterations: int = 100):
         self.iterations = iterations
+        self.iter_error_ = list()
 
     def fit(self, X, y):
         # Check that X and y have correct shape
@@ -34,20 +36,23 @@ class AdaBoost(ClassifierMixin, BaseEstimator):
         self.alphas_ = list()
         self.classifiers_ = list()
         self.errors_ = list()
-        self.accuracies_ = list()
         for i in range(self.iterations):
             self.classifiers_.append(DecisionStump())
             self.classifiers_[i].fit(self.X_, self.y_, self.weights_[i])
 
             prediction = self.classifiers_[i].predict(self.X_)
-            self.accuracies_.append(accuracy_score(prediction, self.y_))
 
             self.errors_.append(np.sum(self.weights_[i] * (prediction != self.y_)) / np.sum(self.weights_[i]))
             self.alphas_.append(np.log((1 - self.errors_[i]) / self.errors_[i]))
 
             self.weights_.append(self.weights_[i] * np.exp(self.alphas_[i] * (prediction != self.y_)))
 
+            self._iter_error(X, y)
+
         return self
+
+    def _iter_error(self, X, y):
+        self.iter_error_.append(accuracy_score(y_true=y, y_pred=self.predict(X)))
 
     def predict(self, X):
         # Check is fit had been called
@@ -72,8 +77,10 @@ if __name__ == '__main__':
 
     data, target = download_data()
 
-    model = AdaBoost(iterations=1000)
+    model = AdaBoost(iterations=100)
     model.fit(data, target)
+
+    print(model.iter_error_)
     print(accuracy_score(
         y_pred=model.predict(data),
         y_true=target,
