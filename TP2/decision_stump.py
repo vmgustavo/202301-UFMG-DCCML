@@ -59,13 +59,13 @@ class DecisionStump(ClassifierMixin, BaseEstimator):
         return self
 
     @staticmethod
-    def _entropy(a: int, b: int):
+    def _entropy(a: float, b: float):
         freq = a / (a + b)
         return -1 * freq * np.log(freq)
 
     def _entropy_step(self, arr: np.ndarray, weights):
-        total_0 = int(np.sum(weights[np.where(arr == 0)]))
-        total_1 = int(np.sum(weights[np.where(arr == 1)]))
+        total_0 = float(np.sum(weights[np.where(arr == 0)]))
+        total_1 = float(np.sum(weights[np.where(arr == 1)]))
 
         return (
             self._entropy(total_0, total_1)
